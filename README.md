@@ -9,9 +9,12 @@ A SwiftUI design system: theme tokens and reusable components to keep apps visua
 ## Features
 
 - **`Theme`** — centralized color palette, spacing, and corner-radius tokens. Rebrand in one line.
+- **`AppTypography`** — Dynamic-Type-aware font tokens with a custom-font family and runtime `FontRegistrar`.
 - **Button styles** — `.primary` and `.secondary`.
-- **Components** — `Card`, `LoadingOverlay`, and `Toast`.
+- **Components** — `Card`, `LoadingOverlay`, `Toast`, `AsyncButton`, `EmptyStateView` (built on `ContentUnavailableView`), `Badge`, and a `.shimmering()` skeleton modifier.
 - **`Color(hex:)`** — hex string initializer (RGB / RGBA).
+
+> Built for iOS 17+ to use the latest SwiftUI APIs.
 
 ## Installation
 
@@ -35,11 +38,17 @@ content.loadingOverlay(isPresented: isLoading, message: "Processing…")
 
 // Toast
 content.toast($toast)   // @State private var toast: Toast?
+
+// Custom fonts
+FontRegistrar.register(["Inter-Regular", "Inter-Bold"])
+AppTypography.family = FontFamily(regular: "Inter-Regular", medium: "Inter-Medium",
+                                  semibold: "Inter-SemiBold", bold: "Inter-Bold")
+Text("Title").font(AppTypography.title)
 ```
 
 ## Requirements
 
-- iOS 16.0+ · Swift 5.9+
+- iOS 17.0+ · Swift 5.9+
 
 ## License
 

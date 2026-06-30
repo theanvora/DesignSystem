@@ -30,28 +30,16 @@ public struct EmptyStateView: View {
     }
 
     public var body: some View {
-        VStack(spacing: Theme.spacing.md) {
-            Image(systemName: icon)
-                .font(.system(size: 48))
-                .foregroundStyle(Theme.colors.textSecondary)
-            Text(title)
-                .font(.headline)
-                .multilineTextAlignment(.center)
-            if let message {
-                Text(message)
-                    .font(.subheadline)
-                    .foregroundStyle(Theme.colors.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
+        ContentUnavailableView {
+            Label(title, systemImage: icon)
+        } description: {
+            if let message { Text(message) }
+        } actions: {
             if let actionTitle, let action {
                 Button(actionTitle, action: action)
-                    .buttonStyle(.secondary)
-                    .padding(.horizontal, Theme.spacing.xl)
-                    .padding(.top, Theme.spacing.sm)
+                    .buttonStyle(.borderedProminent)
             }
         }
-        .padding(Theme.spacing.xl)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
