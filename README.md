@@ -3,7 +3,7 @@
 A SwiftUI design system: theme tokens and reusable components to keep apps visually consistent.
 
 [![Swift](https://img.shields.io/badge/Swift-5.9+-orange.svg)](https://swift.org)
-[![Platform](https://img.shields.io/badge/iOS-16%2B-blue.svg)](https://developer.apple.com/ios/)
+[![Platform](https://img.shields.io/badge/iOS-26%2B-blue.svg)](https://developer.apple.com/ios/)
 [![SPM](https://img.shields.io/badge/SPM-compatible-brightgreen.svg)](https://swift.org/package-manager/)
 
 ## Features
@@ -14,7 +14,7 @@ A SwiftUI design system: theme tokens and reusable components to keep apps visua
 - **Components** — `Card`, `LoadingOverlay`, `Toast`, `AsyncButton`, `EmptyStateView` (built on `ContentUnavailableView`), `Badge`, and a `.shimmering()` skeleton modifier.
 - **`Color(hex:)`** — hex string initializer (RGB / RGBA).
 
-> Built for iOS 17+ to use the latest SwiftUI APIs.
+> Built for iOS 26+ to use the latest SwiftUI APIs.
 
 ## Installation
 
@@ -48,7 +48,7 @@ Text("Title").font(AppTypography.title)
 
 ## Requirements
 
-- iOS 17.0+ · Swift 5.9+
+- iOS 26.0+ · Swift 5.9+
 
 ## License
 
