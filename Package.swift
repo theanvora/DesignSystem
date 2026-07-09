@@ -7,10 +7,10 @@ let package = Package(
         .iOS(.v17)
     ],
     products: [
-        .library(name: "DesignSystem", targets: ["DesignSystem"]),
+        .library(name: "AnvyxDesignKit", targets: ["AnvyxDesignKit"]),
     ],
     targets: [
-        .target(name: "DesignSystem"),
-        .testTarget(name: "DesignSystemTests", dependencies: ["DesignSystem"]),
+        .target(name: "AnvyxDesignKit"),
+        .testTarget(name: "AnvyxDesignKitTests", dependencies: ["AnvyxDesignKit"]),
     ]
 )

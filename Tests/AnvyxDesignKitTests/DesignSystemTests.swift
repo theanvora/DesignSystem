@@ -7,7 +7,7 @@
 
 import XCTest
 import SwiftUI
-@testable import DesignSystem
+@testable import AnvyxDesignKit
 
 final class DesignSystemTests: XCTestCase {
     func testHexColorParsesWithoutCrashing() {
