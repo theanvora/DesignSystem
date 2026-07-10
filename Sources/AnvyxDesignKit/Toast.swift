@@ -30,14 +30,14 @@ public struct Toast: Equatable, Identifiable, Sendable {
     }
 }
 
-/// Presents a `Toast` binding that auto-dismisses after `duration` seconds.
-public struct ToastModifier: ViewModifier {
-    @Binding var toast: Toast?
-    var duration: TimeInterval
+/// The themed banner used to render a `Toast` (shared by the single-toast and
+/// queued-toast presenters).
+struct ToastBanner: View {
+    let toast: Toast
     @Environment(\.anvyxTheme) private var theme
 
-    private func tint(for style: Toast.Style) -> Color {
-        switch style {
+    private var tint: Color {
+        switch toast.style {
         case .info:    return theme.colors.accent
         case .success: return theme.colors.success
         case .warning: return theme.colors.warning
@@ -45,23 +45,33 @@ public struct ToastModifier: ViewModifier {
         }
     }
 
+    var body: some View {
+        HStack(spacing: theme.spacing.sm) {
+            Image(systemName: toast.icon)
+            Text(toast.message).font(.subheadline.weight(.medium))
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, theme.spacing.md)
+        .padding(.vertical, theme.spacing.sm)
+        .background(tint, in: Capsule())
+        .padding(.top, theme.spacing.sm)
+        .transition(.move(edge: .top).combined(with: .opacity))
+    }
+}
+
+/// Presents a `Toast` binding that auto-dismisses after `duration` seconds.
+public struct ToastModifier: ViewModifier {
+    @Binding var toast: Toast?
+    var duration: TimeInterval
+
     public func body(content: Content) -> some View {
         content.overlay(alignment: .top) {
             if let toast {
-                HStack(spacing: theme.spacing.sm) {
-                    Image(systemName: toast.icon)
-                    Text(toast.message).font(.subheadline.weight(.medium))
-                }
-                .foregroundStyle(.white)
-                .padding(.horizontal, theme.spacing.md)
-                .padding(.vertical, theme.spacing.sm)
-                .background(tint(for: toast.style), in: Capsule())
-                .padding(.top, theme.spacing.sm)
-                .transition(.move(edge: .top).combined(with: .opacity))
-                .task(id: toast.id) {
-                    try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
-                    self.toast = nil
-                }
+                ToastBanner(toast: toast)
+                    .onReceive(Timer.publish(every: duration, on: .main, in: .common).autoconnect()) { _ in
+                        self.toast = nil
+                    }
+                    .id(toast.id) // restart the auto-dismiss timer for each new toast
             }
         }
         .animation(.spring(duration: 0.3), value: toast)

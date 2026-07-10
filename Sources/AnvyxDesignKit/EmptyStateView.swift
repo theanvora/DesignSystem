@@ -43,6 +43,49 @@ public struct EmptyStateView: View {
     }
 }
 
+public extension EmptyStateView {
+    /// "No results" placeholder for empty searches/filters.
+    static func noResults(
+        title: String = "No results",
+        message: String? = "Try a different search or filter.",
+        actionTitle: String? = nil,
+        action: (() -> Void)? = nil
+    ) -> EmptyStateView {
+        EmptyStateView(icon: "magnifyingglass", title: title, message: message, actionTitle: actionTitle, action: action)
+    }
+
+    /// Generic error placeholder with an optional retry action.
+    static func error(
+        title: String = "Something went wrong",
+        message: String? = nil,
+        retryTitle: String? = "Try Again",
+        retry: (() -> Void)? = nil
+    ) -> EmptyStateView {
+        EmptyStateView(icon: "exclamationmark.triangle", title: title, message: message, actionTitle: retryTitle, action: retry)
+    }
+
+    /// Offline placeholder.
+    static func offline(
+        title: String = "You're offline",
+        message: String? = "Check your connection and try again.",
+        retryTitle: String? = "Retry",
+        retry: (() -> Void)? = nil
+    ) -> EmptyStateView {
+        EmptyStateView(icon: "wifi.slash", title: title, message: message, actionTitle: retryTitle, action: retry)
+    }
+
+    /// Empty-collection placeholder (nothing created yet).
+    static func empty(
+        icon: String = "tray",
+        title: String,
+        message: String? = nil,
+        actionTitle: String? = nil,
+        action: (() -> Void)? = nil
+    ) -> EmptyStateView {
+        EmptyStateView(icon: icon, title: title, message: message, actionTitle: actionTitle, action: action)
+    }
+}
+
 /// A small pill badge (counts, statuses).
 public struct Badge: View {
     let text: String

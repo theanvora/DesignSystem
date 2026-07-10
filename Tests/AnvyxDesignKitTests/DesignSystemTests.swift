@@ -77,4 +77,35 @@ final class DesignSystemTests: XCTestCase {
         XCTAssertNil(motion.resolved(motion.standard, reduceMotion: true))
         XCTAssertNotNil(motion.resolved(motion.standard, reduceMotion: false))
     }
+
+    // MARK: - Components (phase 4)
+
+    @MainActor
+    func testToastQueuePresentsSequentially() {
+        let queue = ToastQueue()
+        queue.enqueue("first")
+        queue.enqueue("second", style: .success)
+        XCTAssertEqual(queue.current?.message, "first")
+
+        queue.dismissCurrent()
+        XCTAssertEqual(queue.current?.message, "second")
+
+        queue.dismissCurrent()
+        XCTAssertNil(queue.current)
+    }
+
+    @MainActor
+    func testToastQueueClearRemovesEverything() {
+        let queue = ToastQueue()
+        queue.enqueue("a")
+        queue.enqueue("b")
+        queue.clear()
+        XCTAssertNil(queue.current)
+    }
+
+    func testIconSizeTokens() {
+        XCTAssertEqual(AnvyxIcon.Size.small.points, 16)
+        XCTAssertEqual(AnvyxIcon.Size.medium.points, 22)
+        XCTAssertEqual(AnvyxIcon.Size.large.points, 32)
+    }
 }
