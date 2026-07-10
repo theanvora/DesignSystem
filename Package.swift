@@ -1,5 +1,12 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.2
 import PackageDescription
+
+let concurrencyBaseline: [SwiftSetting] = [
+    .swiftLanguageMode(.v6),
+    .defaultIsolation(nil),
+    .enableUpcomingFeature("NonisolatedNonsendingByDefault"),
+    .enableUpcomingFeature("InferIsolatedConformances"),
+]
 
 let package = Package(
     name: "DesignSystem",
@@ -10,7 +17,7 @@ let package = Package(
         .library(name: "AnvyxDesignKit", targets: ["AnvyxDesignKit"]),
     ],
     targets: [
-        .target(name: "AnvyxDesignKit"),
-        .testTarget(name: "AnvyxDesignKitTests", dependencies: ["AnvyxDesignKit"]),
+        .target(name: "AnvyxDesignKit", swiftSettings: concurrencyBaseline),
+        .testTarget(name: "AnvyxDesignKitTests", dependencies: ["AnvyxDesignKit"], swiftSettings: concurrencyBaseline),
     ]
 )

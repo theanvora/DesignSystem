@@ -12,6 +12,11 @@ import SwiftUI
 /// ```swift
 /// Theme.colors = .init(accent: .indigo)
 /// ```
+///
+/// Isolated to the main actor: these tokens are read while building SwiftUI views
+/// (which run on the main actor) and customized once at launch, so main-actor
+/// isolation makes the mutable `static var` API concurrency-safe without changing it.
+@MainActor
 public enum Theme {
     public static var colors = ColorPalette()
     public static var spacing = Spacing()

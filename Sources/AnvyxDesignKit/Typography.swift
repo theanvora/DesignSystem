@@ -35,6 +35,11 @@ public struct FontFamily: Sendable {
 
 /// Typography tokens that scale with Dynamic Type. Set `family` once at launch to
 /// switch the whole app to a custom font; otherwise the system font is used.
+///
+/// Isolated to the main actor: the `family` token is read while building SwiftUI
+/// views (which run on the main actor) and set once at launch, so main-actor
+/// isolation makes the mutable `static var` API concurrency-safe without changing it.
+@MainActor
 public enum AppTypography {
     public static var family: FontFamily?
 
@@ -79,6 +84,7 @@ public enum FontRegistrar {
 
 public extension Font {
     /// Shorthand for `AppTypography.font(...)`.
+    @MainActor
     static func app(_ style: Font.TextStyle, weight: Font.Weight = .regular, size: CGFloat) -> Font {
         AppTypography.font(style, weight: weight, size: size)
     }

@@ -29,6 +29,7 @@ public struct Toast: Equatable, Identifiable, Sendable {
         }
     }
 
+    @MainActor
     var tint: Color {
         switch style {
         case .info:    return Theme.colors.accent
