@@ -24,7 +24,9 @@ struct ComponentGallery: View {
                 Group {
                     Button("Primary") {}.buttonStyle(.primary)
                     Button("Secondary") {}.buttonStyle(.secondary)
-                    Button("Glass") {}.anvyxGlassButtonStyle()
+                    if #available(iOS 26, *) {
+                        Button("Glass") {}.anvyxProminentGlassButtonStyle()
+                    }
                 }
 
                 HStack(spacing: theme.spacing.sm) {
