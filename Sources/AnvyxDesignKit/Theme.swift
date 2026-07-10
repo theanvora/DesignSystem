@@ -7,21 +7,10 @@
 
 import SwiftUI
 
-/// Central design tokens. Override the palette once at launch to rebrand an app:
-///
-/// ```swift
-/// Theme.colors = .init(accent: .indigo)
-/// ```
-///
-/// Isolated to the main actor: these tokens are read while building SwiftUI views
-/// (which run on the main actor) and customized once at launch, so main-actor
-/// isolation makes the mutable `static var` API concurrency-safe without changing it.
-@MainActor
-public enum Theme {
-    public static var colors = ColorPalette()
-    public static var spacing = Spacing()
-    public static var radius = Radius()
-}
+// Design-token value types. These are carried by `AnvyxTheme` and injected via
+// `@Environment(\.anvyxTheme)`. (The former global `Theme`/`AppTypography` static
+// singletons were removed in the re-theme — tokens are now reactive per SE-0466,
+// no global mutable state.)
 
 public struct ColorPalette: Sendable {
     public var accent: Color

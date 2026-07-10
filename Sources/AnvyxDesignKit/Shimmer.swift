@@ -11,7 +11,7 @@ import SwiftUI
 ///
 /// ```swift
 /// RoundedRectangle(cornerRadius: 8)
-///     .fill(Theme.colors.surface)
+///     .fill(theme.colors.surface)
 ///     .frame(height: 16)
 ///     .shimmering()
 /// ```

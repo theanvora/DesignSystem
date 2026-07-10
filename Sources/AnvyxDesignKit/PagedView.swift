@@ -17,6 +17,7 @@ public struct PagedView<Data: RandomAccessCollection, Content: View>: View where
     private let data: Data
     private let content: (Data.Element) -> Content
     @State private var selection: Data.Element.ID?
+    @Environment(\.anvyxTheme) private var theme
 
     public init(_ data: Data, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.data = data
@@ -24,7 +25,7 @@ public struct PagedView<Data: RandomAccessCollection, Content: View>: View where
     }
 
     public var body: some View {
-        VStack(spacing: Theme.spacing.md) {
+        VStack(spacing: theme.spacing.md) {
             TabView(selection: $selection) {
                 ForEach(data) { element in
                     content(element).tag(Optional(element.id))
@@ -32,10 +33,10 @@ public struct PagedView<Data: RandomAccessCollection, Content: View>: View where
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
 
-            HStack(spacing: Theme.spacing.sm) {
+            HStack(spacing: theme.spacing.sm) {
                 ForEach(data) { element in
                     Circle()
-                        .fill(element.id == selection ? Theme.colors.accent : Theme.colors.textSecondary.opacity(0.3))
+                        .fill(element.id == selection ? theme.colors.accent : theme.colors.textSecondary.opacity(0.3))
                         .frame(width: 8, height: 8)
                 }
             }

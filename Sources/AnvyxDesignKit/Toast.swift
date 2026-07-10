@@ -28,35 +28,35 @@ public struct Toast: Equatable, Identifiable, Sendable {
         case .error:   return "xmark.octagon.fill"
         }
     }
-
-    @MainActor
-    var tint: Color {
-        switch style {
-        case .info:    return Theme.colors.accent
-        case .success: return Theme.colors.success
-        case .warning: return Theme.colors.warning
-        case .error:   return Theme.colors.danger
-        }
-    }
 }
 
 /// Presents a `Toast` binding that auto-dismisses after `duration` seconds.
 public struct ToastModifier: ViewModifier {
     @Binding var toast: Toast?
     var duration: TimeInterval
+    @Environment(\.anvyxTheme) private var theme
+
+    private func tint(for style: Toast.Style) -> Color {
+        switch style {
+        case .info:    return theme.colors.accent
+        case .success: return theme.colors.success
+        case .warning: return theme.colors.warning
+        case .error:   return theme.colors.danger
+        }
+    }
 
     public func body(content: Content) -> some View {
         content.overlay(alignment: .top) {
             if let toast {
-                HStack(spacing: Theme.spacing.sm) {
+                HStack(spacing: theme.spacing.sm) {
                     Image(systemName: toast.icon)
                     Text(toast.message).font(.subheadline.weight(.medium))
                 }
                 .foregroundStyle(.white)
-                .padding(.horizontal, Theme.spacing.md)
-                .padding(.vertical, Theme.spacing.sm)
-                .background(toast.tint, in: Capsule())
-                .padding(.top, Theme.spacing.sm)
+                .padding(.horizontal, theme.spacing.md)
+                .padding(.vertical, theme.spacing.sm)
+                .background(tint(for: toast.style), in: Capsule())
+                .padding(.top, theme.spacing.sm)
                 .transition(.move(edge: .top).combined(with: .opacity))
                 .task(id: toast.id) {
                     try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))

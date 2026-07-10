@@ -33,40 +33,17 @@ public struct FontFamily: Sendable {
     }
 }
 
-/// Typography tokens that scale with Dynamic Type. Set `family` once at launch to
-/// switch the whole app to a custom font; otherwise the system font is used.
-///
-/// Isolated to the main actor: the `family` token is read while building SwiftUI
-/// views (which run on the main actor) and set once at launch, so main-actor
-/// isolation makes the mutable `static var` API concurrency-safe without changing it.
-@MainActor
-public enum AppTypography {
-    public static var family: FontFamily?
-
-    /// A Dynamic-Type-aware font for the given text style + weight.
-    public static func font(_ style: Font.TextStyle, weight: Font.Weight = .regular, size: CGFloat) -> Font {
-        if let family {
-            return .custom(family.postScriptName(for: weight), size: size, relativeTo: style)
-        }
-        return .system(style, design: .default).weight(weight)
-    }
-
-    // Common tokens
-    public static var largeTitle: Font { font(.largeTitle, weight: .bold, size: 34) }
-    public static var title: Font      { font(.title, weight: .bold, size: 28) }
-    public static var headline: Font   { font(.headline, weight: .semibold, size: 17) }
-    public static var body: Font       { font(.body, weight: .regular, size: 17) }
-    public static var callout: Font    { font(.callout, weight: .medium, size: 16) }
-    public static var caption: Font    { font(.caption, weight: .regular, size: 12) }
-}
+// Typography tokens now live on `ThemeTypography` (see AnvyxTheme.swift), read via
+// `@Environment(\.anvyxTheme).typography`. The former global `AppTypography` and
+// `Font.app(...)` static API was removed in the re-theme.
 
 /// Registers custom font files bundled with the app/package at runtime, so they
 /// don't need to be listed in Info.plist (`UIAppFonts`).
 ///
 /// ```swift
 /// FontRegistrar.register(["Inter-Regular", "Inter-Bold"], in: .module)
-/// AppTypography.family = FontFamily(regular: "Inter-Regular", medium: "Inter-Medium",
-///                                   semibold: "Inter-SemiBold", bold: "Inter-Bold")
+/// theme.typography.family = FontFamily(regular: "Inter-Regular", medium: "Inter-Medium",
+///                                      semibold: "Inter-SemiBold", bold: "Inter-Bold")
 /// ```
 public enum FontRegistrar {
     @discardableResult
@@ -79,13 +56,5 @@ public enum FontRegistrar {
             }
         }
         return allOK
-    }
-}
-
-public extension Font {
-    /// Shorthand for `AppTypography.font(...)`.
-    @MainActor
-    static func app(_ style: Font.TextStyle, weight: Font.Weight = .regular, size: CGFloat) -> Font {
-        AppTypography.font(style, weight: weight, size: size)
     }
 }

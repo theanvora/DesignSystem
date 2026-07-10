@@ -15,13 +15,14 @@ import SwiftUI
 public struct LoadingOverlay: ViewModifier {
     let isPresented: Bool
     var message: String?
+    @Environment(\.anvyxTheme) private var theme
 
     public func body(content: Content) -> some View {
         content.overlay {
             if isPresented {
                 ZStack {
                     Color.black.opacity(0.35).ignoresSafeArea()
-                    VStack(spacing: Theme.spacing.md) {
+                    VStack(spacing: theme.spacing.md) {
                         ProgressView()
                             .controlSize(.large)
                             .tint(.white)
@@ -31,8 +32,8 @@ public struct LoadingOverlay: ViewModifier {
                                 .foregroundStyle(.white)
                         }
                     }
-                    .padding(Theme.spacing.xl)
-                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: Theme.radius.lg))
+                    .padding(theme.spacing.xl)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: theme.radius.lg))
                 }
                 .transition(.opacity)
             }
@@ -50,6 +51,7 @@ public extension View {
 /// A simple card container using the theme surface + radius.
 public struct Card<Content: View>: View {
     @ViewBuilder var content: () -> Content
+    @Environment(\.anvyxTheme) private var theme
 
     public init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content
@@ -57,8 +59,8 @@ public struct Card<Content: View>: View {
 
     public var body: some View {
         content()
-            .padding(Theme.spacing.md)
-            .background(Theme.colors.surface)
-            .clipShape(RoundedRectangle(cornerRadius: Theme.radius.md, style: .continuous))
+            .padding(theme.spacing.md)
+            .background(theme.colors.surface)
+            .clipShape(RoundedRectangle(cornerRadius: theme.radius.md, style: .continuous))
     }
 }

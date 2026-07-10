@@ -46,9 +46,11 @@ public struct EmptyStateView: View {
 /// A small pill badge (counts, statuses).
 public struct Badge: View {
     let text: String
-    var color: Color
+    var color: Color?
+    @Environment(\.anvyxTheme) private var theme
 
-    public init(_ text: String, color: Color = Theme.colors.accent) {
+    /// `color` defaults to the theme accent when `nil`.
+    public init(_ text: String, color: Color? = nil) {
         self.text = text
         self.color = color
     }
@@ -57,8 +59,8 @@ public struct Badge: View {
         Text(text)
             .font(.caption2.weight(.bold))
             .foregroundStyle(.white)
-            .padding(.horizontal, Theme.spacing.sm)
+            .padding(.horizontal, theme.spacing.sm)
             .padding(.vertical, 2)
-            .background(color, in: Capsule())
+            .background(color ?? theme.colors.accent, in: Capsule())
     }
 }
