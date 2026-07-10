@@ -108,4 +108,27 @@ final class DesignSystemTests: XCTestCase {
         XCTAssertEqual(AnvyxIcon.Size.medium.points, 22)
         XCTAssertEqual(AnvyxIcon.Size.large.points, 32)
     }
+
+    // MARK: - Rendering (snapshot smoke) — phase 5
+
+    @MainActor
+    private func renderedImage(_ view: some View) -> UIImage? {
+        let renderer = ImageRenderer(content: view.frame(width: 320, height: 900))
+        renderer.scale = 2
+        return renderer.uiImage
+    }
+
+    @MainActor
+    func testGalleryRendersLightDarkAndLargeType() {
+        let gallery = ComponentGallery().anvyxTheme(AnvyxTheme())
+        let light = renderedImage(gallery.environment(\.colorScheme, .light))
+        let dark = renderedImage(gallery.environment(\.colorScheme, .dark))
+        let largeType = renderedImage(gallery.environment(\.dynamicTypeSize, .accessibility3))
+
+        for image in [light, dark, largeType] {
+            XCTAssertNotNil(image)
+            XCTAssertGreaterThan(image?.size.width ?? 0, 0)
+            XCTAssertGreaterThan(image?.size.height ?? 0, 0)
+        }
+    }
 }
